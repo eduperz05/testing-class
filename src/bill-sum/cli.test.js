@@ -5,7 +5,7 @@ import { LoggerFake } from "./Logger/LoggerFake.js";
 import { CliArgumentsFake } from "./CliArguments/CliArgumentsFake.js";
 
 describe("bill sum cli", () => {
-  it("works", () => {
+  it.only("works", () => {
     const cliArguments = new CliArgumentsFake();
     const logger = new LoggerFake();
     const fileReader = new FileReaderFake();

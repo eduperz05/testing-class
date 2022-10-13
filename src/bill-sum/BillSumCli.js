@@ -1,6 +1,9 @@
 import { CliArguments } from "./CliArguments/CliArguments.js";
 import { FileReader } from "./FileReader/FileReader.js";
 import { Logger } from "./Logger/Logger.js";
+import { OrderLine } from "./Models/OrderLine.js";
+import { Ros } from "./Models/Ros.js";
+import { ParseAndSum } from "./ParseAndSum.js";
 
 export class BillSumCli {
   constructor(
@@ -16,26 +19,30 @@ export class BillSumCli {
   execute() {
     const filePath = this.cliArguments.readFirstArgument();
     try {
-      const datos = this.fileReader.read(filePath);
+      const rosString = this.fileReader.read(filePath);
+      const fopo = new ParseAndSum();
+      const total = fopo.parseAndSum(rosString);
 
-      const csvData = this.parseCsv(datos);
-      const data = this.summatory(csvData);
-
-      this.logger.log(data);
+      this.logger.log(total);
     } catch (error) {
       this.logger.log("El archivo no existe");
     }
   }
 
-  summatory(csvData) {
-    return csvData.reduce((a, b) => a + b);
+  parseCsv(rosString) {
+    const orderLines = rosString
+      .trim()
+      .split("\n")
+      .map((line) => this.parseRowToOrderLine(line));
+
+    const ros = new Ros(orderLines);
+
+    return ros;
   }
 
-  parseCsv(datos) {
-    return datos
-      .split("\n")
-      .map((line) => line.split(","))
-      .map((columnas) => columnas[1])
-      .map((string) => parseInt(string));
+  parseRowToOrderLine(row) {
+    const columns = row.split(",");
+
+    return new OrderLine(columns[0], columns[1], columns[2]);
   }
 }
