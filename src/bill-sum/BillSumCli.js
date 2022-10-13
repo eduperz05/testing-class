@@ -27,6 +27,11 @@ export class BillSumCli {
     }
   }
 
+  /**
+   * It takes an array of numbers and returns the sum of all the numbers in the array
+   * @param csvData - The data from the CSV file.
+   * @returns The sum of all the values in the array.
+   */
   summatory(csvData) {
     return csvData.reduce((a, b) => a + b);
   }
