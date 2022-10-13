@@ -6,9 +6,9 @@ export class FileReaderFake extends FileReader {
       throw new Error("El archivo no existe");
     }
 
-    return `manzanas,10
-peras,20
-platanos,5`;
+    return `manzanas,1,10
+peras,1,20
+platanos,1,5`;
   }
 
   throwError() {
